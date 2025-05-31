@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Big5tech - Job Board Portal</title>
+  <link rel="icon" href="bigg.jpeg">
+  <!-- Preconnect to Google Fonts with fallback -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome with local fallback -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <!-- SweetAlert2 with local fallback -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    /* Base styles with improved browser compatibility */
+    body {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+                   Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f9;
+      line-height: 1.6;
+      background-image: url(cc.jpeg);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-attachment: fixed;
+      background-size: cover;
+    }
+    
+    /* Improved header compatibility */
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+      position: relative;
+      display: block;
+      overflow: hidden;
+    }
+    
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: left;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .logo {
+      height: 60px;
+      width: auto;
+      margin-bottom: 10px;
+    }
+    
+    .developer-credit {
+      font-size: 14px;
+      color: #1abc9c;
+      font-weight: bold;
+      background: rgba(0,0,0,0.5);
+      padding: 5px 10px;
+      border-radius: 20px;
+      margin-top: 10px;
+    }
+    
+    /* Auth buttons with better mobile support */
+    .auth-buttons {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      white-space: nowrap;
+    }
+    
+    @media (max-width: 768px) {
+      .auth-buttons {
+        position: static;
+        transform: none;
+        margin-top: 10px;
+        display: inline-block;
+      }
+      .developer-credit {
+        position: static;
+        transform: none;
+        display: block;
+        margin-top: 10px;
+      }
+    }
+    
+    /* Navigation with better mobile support */
+    nav {
+      display: flex;
+      justify-content: center;
+      background: #34495e;
+      flex-wrap: wrap;
+    }
+    
+    nav a {
+      color: white;
+      padding: 1rem;
+      text-decoration: none;
+      font-weight: 500;
+      display: inline-block;
+      text-align: center;
+      min-width: 120px;
+      box-sizing: border-box;
+    }
+    
+    nav a:hover {
+      background: #2c3e50;
+    }
+    
+    /* Container with better browser support */
+    .container {
+      max-width: 1000px;
+      margin: 20px auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      box-sizing: border-box;
+      position: relative;
+    }
+    
+    .footer {
+      text-align: center;
+      padding: 10px;
+      background: #2c3e50;
+      color: white;
+      margin-top: 20px;
+    }
+    
+    /* Banner with animation fallback */
+    .banner {
+      background: #e67e22;
+      color: white;
+      text-align: center;
+      padding: 12px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      opacity: 1;
+      transition: opacity 1s ease;
+    }
+    
+    /* Job and application cards */
+    .job, .application {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 0;
+      margin-bottom: 15px;
+    }
+    
+    /* Status indicators */
+    .status {
+      font-weight: bold;
+      padding: 5px 8px;
+      display: inline-block;
+      border-radius: 4px;
+      margin-top: 5px;
+      font-size: 0.9em;
+    }
+    
+    .status.pending {
+      background: #f39c12;
+      color: white;
+    }
+    
+    .status.accepted {
+      background: #2ecc71;
+      color: white;
+    }
+    
+    .status.declined {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    /* Buttons with enhanced compatibility */
+    button {
+      background: #1abc9c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px 5px 0 0;
+      font-size: 0.9em;
+      font-family: inherit;
+      transition: background 0.3s ease;
+    }
+    
+    button:hover {
+      background: #16a085;
+    }
+    
+    button.secondary {
+      background: #3498db;
+    }
+    
+    button.secondary:hover {
+      background: #2980b9;
+    }
+    
+    button.danger {
+      background: #e74c3c;
+    }
+    
+    button.danger:hover {
+      background: #c0392b;
+    }
+    
+    /* Form elements with consistent styling */
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    
+    /* Account type selector */
+    .account-type {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+    
+    .account-type-btn {
+      padding: 15px 25px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      width: 45%;
+    }
+    
+    .account-type-btn:hover {
+      border-color: #1abc9c;
+    }
+    
+    .account-type-btn.selected {
+      border-color: #1abc9c;
+      background: rgba(26, 188, 156, 0.1);
+    }
+    
+    .account-type-btn i {
+      font-size: 2em;
+      margin-bottom: 10px;
+      display: block;
+    }
+    
+    /* Utility classes */
+    .hidden {
+      display: none !important;
+    }
+    
+    .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 10px 0;
+      color: #555;
+    }
+    
+    .job-meta span {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .job-actions {
+      margin-top: 15px;
+    }
+    
+    /* Chatbot styles */
+    .chatbot-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    
+    .chatbot-button {
+      background: #1abc9c;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .chatbot-window {
+      position: absolute;
+      bottom: 70px;
+      right: 0;
+      width: 300px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+      overflow: hidden;
+      display: none;
+    }
+    
+    .chatbot-header {
+      background: #2c3e50;
+      color: white;
+      padding: 10px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .chatbot-messages {
+      height: 300px;
+      overflow-y: auto;
+      padding: 10px;
+      background: #f9f9f9;
+    }
+    
+    .chatbot-input {
+      display: flex;
+      padding: 10px;
+      background: #eee;
+    }
+    
+    .chatbot-input input {
+      flex: 1;
+      margin-bottom: 0;
+      border-radius: 20px 0 0 20px;
+    }
+    
+    .chatbot-input button {
+      border-radius: 0 20px 20px 0;
+      margin: 0;
+    }
+    
+    .message {
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 18px;
+      max-width: 80%;
+    }
+    
+    .user-message {
+      background: #1abc9c;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 5px;
+    }
+    
+    .bot-message {
+      background: #e6e6e6;
+      margin-right: auto;
+      border-bottom-left-radius: 5px;
+    }
+    
+    /* Responsive grid fallbacks */
+    .job-list, .application-list {
+      display: block;
+    }
+    
+    .job-list > div, .application-list > div {
+      margin-bottom: 20px;
+    }
+    
+    /* Print styles */
+    @media print {
+      nav, .auth-buttons, button, .footer, .chatbot-container {
+        display: none !important;
+      }
+      .container {
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+        background: white;
+      }
+    }
+    
+    /* Job grid for larger screens */
+    @media (min-width: 768px) {
+      .job-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+      }
+    }
+    
+    /* Account-specific navigation */
+    .job-seeker-nav, .employer-nav {
+      display: none;
+    }
+    
+    .account-active .job-seeker-nav,
+    .account-active .employer-nav {
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="logo-container">
+    <img src="" alt="Big5tech_Job_Board portal Uganda" class="logo" width="50px" height="50px">
+    <div class="developer-credit">WELCOME TO BIG5TECH JOB BOARD PORTAL UGANDA</div>
+  </div>
+  <div class="auth-buttons" id="authButtons">
+    <button onclick="showLoginForm()"><i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login</button>
+    <button class="secondary" onclick="showAccountTypeSelection()"><i class="fas fa-user-plus" aria-hidden="true"></i> Register</button>
+  </div>
+  <div class="auth-buttons hidden" id="userInfo">
+    <span class="user-info">Welcome, <span id="usernameDisplay"></span> (<span id="userTypeDisplay"></span>)</span>
+    <button class="danger" onclick="logout()"><i class="fas fa-sign-out-alt" aria-hidden="true"></i> Logout</button>
+  </div>
+</header>
+
+<nav>
+  <a href="#" onclick="showHome()"><i class="fas fa-home" aria-hidden="true"></i> Home</a>
+  <a href="#" class="job-seeker-nav" onclick="checkAuthBeforeResume()"><i class="fas fa-file-alt"></i> My Resume</a>
+  <a href="#" class="job-seeker-nav" onclick="checkAuthBeforeApplications()"><i class="fas fa-folder-open"></i> My Applications</a>
+  <a href="#" class="employer-nav" onclick="checkAuthBeforePosting()"><i class="fas fa-plus-circle"></i> Post Job</a>
+  <a href="#" class="employer-nav" onclick="checkAuthBeforeManageJobs()"><i class="fas fa-briefcase"></i> Manage Jobs</a>
+  <a href="#" onclick="exportApplications()"><i class="fas fa-file-export" aria-hidden="true"></i> Export</a>
+</nav>
+
+<div class="container">
+  <div class="banner" id="adBanner">🎯 Promote your job opening here! Contact us today.<br> jeremyjecy@gmail.com<br>0783514456</div>
+  <div id="content">Welcome to Big5tech Job Portal!</div>
+</div>
+
+<div class="footer">
+  <p>&copy; 2025 Big5tech Job Portal | Developed by Jecy</p>
+</div>
+
+<!-- Chatbot Widget -->
+<div class="chatbot-container">
+  <div class="chatbot-window" id="chatbotWindow">
+    <div class="chatbot-header">
+      <span>Big5tech Assistant</span>
+      <button class="danger" onclick="closeChatbot()" style="padding: 2px 5px; font-size: 12px;">X</button>
+    </div>
+    <div class="chatbot-messages" id="chatbotMessages">
+      <div class="message bot-message">Hello! I'm here to help. How can I assist you today?</div>
+    </div>
+    <div class="chatbot-input">
+      <input type="text" id="chatbotInput" placeholder="Type your message...">
+      <button onclick="sendChatbotMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+  </div>
+  <button class="chatbot-button" onclick="toggleChatbot()">
+    <i class="fas fa-robot"></i>
+  </button>
+</div>
+
+<script>
+// Feature detection and polyfills
+if (!window.Promise) {
+  document.write('<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js"><\/script>');
+}
+
+if (!window.fetch) {
+  document.write('<script src="https://cdn.jsdelivr.net/npm/whatwg-fetch@3/dist/fetch.umd.min.js"><\/script>');
+}
+
+// Global variables
+let currentUser = null;
+const content = document.getElementById('content');
+const banner = document.getElementById('adBanner');
+const authButtons = document.getElementById('authButtons');
+const userInfo = document.getElementById('userInfo');
+const usernameDisplay = document.getElementById('usernameDisplay');
+const userTypeDisplay = document.getElementById('userTypeDisplay');
+
+// Sample data
+let jobs = [
+  {
+    id: 1,
+    title: "Frontend Developer",
+    company: "Big5tech",
+    location: "Remote",
+    salary: "$80,000 - $100,000",
+    description: "We're looking for an experienced frontend developer to join our team.",
+    postedDate: "2023-05-15",
+    type: "Full-time",
+    postedBy: 101 // Employer user ID
+  },
+  {
+    id: 2,
+    title: "UX Designer",
+    company: "DesignHub",
+    location: "New York, NY",
+    salary: "$90,000 - $110,000",
+    description: "Join our design team to create beautiful user experiences.",
+    postedDate: "2023-05-10",
+    type: "Full-time",
+    postedBy: 102 // Employer user ID
+  },
+  {
+    id: 3,
+    title: "Backend Engineer",
+    company: "TechSolutions",
+    location: "San Francisco, CA",
+    salary: "$110,000 - $130,000",
+    description: "Looking for a backend engineer with Node.js experience.",
+    postedDate: "2023-05-05",
+    type: "Full-time",
+    postedBy: 103 // Employer user ID
+  }
+];
+
+let applications = [];
+let resumes = [];
+let users = [
+  { id: 101, username: "employer1", email: "employer1@example.com", type: "employer", company: "Big5tech" },
+  { id: 102, username: "employer2", email: "employer2@example.com", type: "employer", company: "DesignHub" },
+  { id: 103, username: "employer3", email: "employer3@example.com", type: "employer", company: "TechSolutions" }
+];
+
+// Chatbot variables
+const chatbotWindow = document.getElementById('chatbotWindow');
+const chatbotMessages = document.getElementById('chatbotMessages');
+const chatbotInput = document.getElementById('chatbotInput');
+let isCollectingContactInfo = false;
+let contactInfo = {
+  name: '',
+  email: '',
+  phone: '',
+  message: ''
+};
+
+// Simple banner rotation for all browsers
+const ads = [
+  "🚀 Boost your hiring with premium ads!",
+  "🎓 Recruit top talents from our portal!",
+  "💼 Showcase your company today!",
+  "🧩 Custom banners coming soon!"
+];
+let currentAd = 0;
+
+function rotateBanner() {
+  banner.textContent = ads[currentAd];
+  banner.style.opacity = 1;
+  setTimeout(() => {
+    banner.style.opacity = 0.6;
+  }, 3000);
+  currentAd = (currentAd + 1) % ads.length;
+  setTimeout(rotateBanner, 4000);
+}
+
+// Initialize banner rotation
+rotateBanner();
+
+// Chatbot functions
+function toggleChatbot() {
+  chatbotWindow.style.display = chatbotWindow.style.display === 'block' ? 'none' : 'block';
+}
+
+function closeChatbot() {
+  chatbotWindow.style.display = 'none';
+}
+
+function addMessage(text, isUser) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+  messageDiv.textContent = text;
+  chatbotMessages.appendChild(messageDiv);
+  chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function sendChatbotMessage() {
+  const message = chatbotInput.value.trim();
+  if (message === '') return;
+  
+  addMessage(message, true);
+  chatbotInput.value = '';
+  
+  if (isCollectingContactInfo) {
+    handleContactInfoCollection(message);
+  } else {
+    processChatbotResponse(message);
+  }
+}
+
+function handleContactInfoCollection(message) {
+  if (!contactInfo.name) {
+    contactInfo.name = message;
+    addMessage(`Thanks ${message}! Could you please share your email address?`, false);
+  } else if (!contactInfo.email) {
+    if (validateEmail(message)) {
+      contactInfo.email = message;
+      addMessage('Great! Finally, could you share your phone number?', false);
+    } else {
+      addMessage('That doesn\'t look like a valid email. Please enter a valid email address.', false);
+    }
+  } else if (!contactInfo.phone) {
+    contactInfo.phone = message;
+    addMessage('Thank you! One last thing, could you tell me how we can help you?', false);
+  } else {
+    contactInfo.message = message;
+    addMessage('Thank you for your information! Our team will contact you shortly.', false);
+    sendContactInfoToEmail();
+    isCollectingContactInfo = false;
+    contactInfo = { name: '', email: '', phone: '', message: '' };
+  }
+}
+
+function processChatbotResponse(message) {
+  const lowerMessage = message.toLowerCase();
+  
+  if (lowerMessage.includes('help') || lowerMessage.includes('support') || lowerMessage.includes('contact')) {
+    addMessage('I can help connect you with our team. Would you like to share your contact information so we can follow up? (yes/no)', false);
+  } else if (lowerMessage.includes('yes') || lowerMessage.includes('sure') || lowerMessage.includes('okay')) {
+    isCollectingContactInfo = true;
+    addMessage('Great! What\'s your name?', false);
+  } else if (lowerMessage.includes('no') || lowerMessage.includes('not now')) {
+    addMessage('No problem! Let me know if you change your mind.', false);
+  } else if (lowerMessage.includes('hi') || lowerMessage.includes('hello') || lowerMessage.includes('hey')) {
+    addMessage('Hello! How can I help you today?', false);
+  } else if (lowerMessage.includes('job') || lowerMessage.includes('apply') || lowerMessage.includes('career')) {
+    addMessage('You can browse available jobs on our home page. Would you like me to take you there?', false);
+  } else if (lowerMessage.includes('resume') || lowerMessage.includes('cv')) {
+    addMessage('You can create or update your resume in the "Create Resume" section. Would you like me to show you how?', false);
+  } else {
+    addMessage('I\'m not sure I understand. Could you try asking in a different way?', false);
+  }
+}
+
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
+}
+
+function sendContactInfoToEmail() {
+  // In a real implementation, you would send this to your server
+  const emailBody = `New contact from Big5tech Job Portal:
+    Name: ${contactInfo.name}
+    Email: ${contactInfo.email}
+    Phone: ${contactInfo.phone}
+    Message: ${contactInfo.message}
+  `;
+  
+  console.log('Email would be sent to jeremyjecy@gmail.com with:', emailBody);
+  
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      title: 'Contact Information Sent!',
+      text: 'Your details have been sent to our team. We\'ll contact you soon!',
+      icon: 'success'
+    });
+  } else {
+    alert('Your contact information has been sent. We\'ll contact you soon!');
+  }
+}
+
+// Handle Enter key in chatbot input
+chatbotInput.addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    sendChatbotMessage();
+  }
+});
+
+// Check if user is logged in on page load
+document.addEventListener('DOMContentLoaded', function() {
+  try {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (user) {
+      currentUser = user;
+      updateAuthUI();
+      showHome();
+    }
+  } catch (e) {
+    console.error("Error loading user data:", e);
+    showSimpleMessage("Error", "Could not load user data. Please try again.");
+  }
+});
+
+function updateAuthUI() {
+  if (currentUser) {
+    authButtons.classList.add('hidden');
+    userInfo.classList.remove('hidden');
+    usernameDisplay.textContent = currentUser.username;
+    userTypeDisplay.textContent = currentUser.type === 'employer' ? 'Employer' : 'Job Seeker';
+    
+    // Update navigation based on account type
+    document.querySelector('nav').classList.add('account-active');
+  } else {
+    authButtons.classList.remove('hidden');
+    userInfo.classList.add('hidden');
+    document.querySelector('nav').classList.remove('account-active');
+  }
+}
+
+function showSimpleMessage(title, message) {
+  if (typeof Swal !== 'undefined') {
+    Swal.fire(title, message, 'info');
+  } else {
+    content.innerHTML = `<div class="alert"><h2>${title}</h2><p>${message}</p></div>`;
+  }
+}
+
+// Account type selection
+function showAccountTypeSelection() {
+  content.innerHTML = `
+    <h2>Create an Account</h2>
+    <p>Please select your account type:</p>
+    
+    <div class="account-type">
+      <div class="account-type-btn" onclick="selectAccountType('jobseeker')" id="jobseekerBtn">
+        <i class="fas fa-user-tie"></i>
+        <h3>Job Seeker</h3>
+        <p>Looking for jobs</p>
+      </div>
+      
+      <div class="account-type-btn" onclick="selectAccountType('employer')" id="employerBtn">
+        <i class="fas fa-briefcase"></i>
+        <h3>Employer</h3>
+        <p>Hiring talent</p>
+      </div>
+    </div>
+    
+    <div id="registerFormContainer" class="hidden">
+      <!-- Will be filled by selectAccountType function -->
+    </div>
+  `;
+}
+
+function selectAccountType(type) {
+  document.getElementById('jobseekerBtn').classList.remove('selected');
+  document.getElementById('employerBtn').classList.remove('selected');
+  
+  const btn = document.getElementById(type + 'Btn');
+  btn.classList.add('selected');
+  
+  const extraFields = type === 'employer' ? `
+    <div>
+      <label for="regCompany">Company Name</label>
+      <input type="text" id="regCompany" required>
+    </div>
+  ` : '';
+  
+  document.getElementById('registerFormContainer').innerHTML = `
+    <form id="registerForm" onsubmit="handleRegister(event, '${type}')">
+      <div>
+        <label for="regUsername">Username</label>
+        <input type="text" id="regUsername" required>
+      </div>
+      <div>
+        <label for="regEmail">Email</label>
+        <input type="email" id="regEmail" required>
+      </div>
+      ${extraFields}
+      <div>
+        <label for="regPassword">Password</label>
+        <input type="password" id="regPassword" required>
+      </div>
+      <div>
+        <label for="regConfirmPassword">Confirm Password</label>
+        <input type="password" id="regConfirmPassword" required>
+      </div>
+      <button type="submit"><i class="fas fa-user-plus"></i> Register as ${type === 'employer' ? 'Employer' : 'Job Seeker'}</button>
+      <button type="button" class="secondary" onclick="showHome()"><i class="fas fa-times"></i> Cancel</button>
+    </form>
+  `;
+  
+  document.getElementById('registerFormContainer').classList.remove('hidden');
+}
+
+// Main page functions
+function showHome() {
+  let html = `<h2>Available Jobs</h2><div class="job-list">`;
+  
+  if (jobs.length === 0) {
+    html += `<p>No jobs available at the moment. Please check back later.</p>`;
+  } else {
+    jobs.forEach(job => {
+      html += `
+        <div class="job">
+          <h3>${escapeHtml(job.title)}</h3>
+          <p><strong>${escapeHtml(job.company)}</strong> - ${escapeHtml(job.location)}</p>
+          <div class="job-meta">
+            <span><i class="fas fa-money-bill-wave"></i> ${escapeHtml(job.salary)}</span>
+            <span><i class="fas fa-clock"></i> ${escapeHtml(job.type)}</span>
+            <span><i class="fas fa-calendar-alt"></i> Posted: ${escapeHtml(job.postedDate)}</span>
+          </div>
+          <p>${escapeHtml(job.description)}</p>
+          <div class="job-actions">
+            <button onclick="applyForJob(${job.id})" ${currentUser && currentUser.type === 'jobseeker' ? '' : 'disabled'} title="${currentUser ? (currentUser.type !== 'jobseeker' ? 'Only job seekers can apply' : '') : 'Please login as job seeker to apply'}">
+              <i class="fas fa-paper-plane"></i> Apply Now
+            </button>
+            ${currentUser && currentUser.type === 'employer' && currentUser.id === job.postedBy ? `
+              <button class="secondary" onclick="editJob(${job.id})">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="danger" onclick="deleteJob(${job.id})">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    });
+  }
+  
+  html += `</div>`;
+  
+  if (currentUser && currentUser.type === 'employer') {
+    html += `
+      <div style="margin-top: 30px; text-align: center;">
+        <button onclick="checkAuthBeforePosting()">
+          <i class="fas fa-plus-circle"></i> Post New Job
+        </button>
+      </div>
+    `;
+  }
+  
+  content.innerHTML = html;
+}
+
+function showLoginForm() {
+  content.innerHTML = `
+    <h2>Login</h2>
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div>
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" required>
+      </div>
+      <div>
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required>
+      </div>
+      <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
+      <button type="button" class="secondary" onclick="showHome()"><i class="fas fa-times"></i> Cancel</button>
+    </form>
+  `;
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const username = document.getElementById('loginUsername').value;
+  const password = document.getElementById('loginPassword').value;
+  
+  // In a real app, you would verify with server
+  const user = users.find(u => u.username === username);
+  
+  if (user) {
+    currentUser = user;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    updateAuthUI();
+    showHome();
+    
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        title: 'Login Successful!',
+        text: `Welcome back, ${username}!`,
+        icon: 'success'
+      });
+    }
+  } else {
+    showSimpleMessage("Login Failed", "Username not found. Please try again or register.");
+  }
+}
+
+function handleRegister(e, type) {
+  e.preventDefault();
+  const username = document.getElementById('regUsername').value;
+  const email = document.getElementById('regEmail').value;
+  const password = document.getElementById('regPassword').value;
+  const confirmPassword = document.getElementById('regConfirmPassword').value;
+  
+  if (password !== confirmPassword) {
+    showSimpleMessage("Error", "Passwords don't match!");
+    return;
+  }
+  
+  // Check if username already exists
+  if (users.some(u => u.username === username)) {
+    showSimpleMessage("Error", "Username already exists. Please choose another.");
+    return;
+  }
+  
+  // Create new user
+  const newUser = {
+    id: Date.now(),
+    username: username,
+    email: email,
+    type: type,
+    company: type === 'employer' ? document.getElementById('regCompany').value : null
+  };
+  
+  users.push(newUser);
+  currentUser = newUser;
+  localStorage.setItem('currentUser', JSON.stringify(currentUser));
+  updateAuthUI();
+  showHome();
+  
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      title: 'Registration Successful!',
+      text: `Welcome, ${username}! You are now registered as ${type === 'employer' ? 'an Employer' : 'a Job Seeker'}.`,
+      icon: 'success'
+    });
+  }
+}
+
+function logout() {
+  currentUser = null;
+  localStorage.removeItem('currentUser');
+  updateAuthUI();
+  showHome();
+  
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      title: 'Logged Out',
+      text: 'You have been successfully logged out.',
+      icon: 'info'
+    });
+  }
+}
+
+function checkAuthBeforePosting() {
+  if (!currentUser) {
+    showSimpleMessage("Login Required", "You need to login to post a job.");
+    showLoginForm();
+    return;
+  }
+  
+  if (currentUser.type !== 'employer') {
+    showSimpleMessage("Access Denied", "Only employers can post jobs.");
+    return;
+  }
+  
+  showPostJobForm();
+}
+
+function showPostJobForm(jobId = null) {
+  const isEdit = jobId !== null;
+  const job = isEdit ? jobs.find(j => j.id === jobId) : null;
+  
+  content.innerHTML = `
+    <h2>${isEdit ? 'Edit Job Posting' : 'Post a New Job'}</h2>
+    <form id="jobForm" onsubmit="handleJobPost(event, ${isEdit ? jobId : null})">
+      <div>
+        <label for="jobTitle">Job Title</label>
+        <input type="text" id="jobTitle" value="${isEdit ? escapeHtml(job.title) : ''}" required>
+      </div>
+      <div>
+        <label for="jobCompany">Company</label>
+        <input type="text" id="jobCompany" value="${isEdit ? escapeHtml(job.company) : escapeHtml(currentUser.company)}" required>
+      </div>
+      <div>
+        <label for="jobLocation">Location</label>
+        <input type="text" id="jobLocation" value="${isEdit ? escapeHtml(job.location) : ''}" required>
+      </div>
+      <div>
+        <label for="jobSalary">Salary Range</label>
+        <input type="text" id="jobSalary" value="${isEdit ? escapeHtml(job.salary) : ''}" required>
+      </div>
+      <div>
+        <label for="jobType">Job Type</label>
+        <select id="jobType" required>
+          <option value="Full-time" ${isEdit && job.type === 'Full-time' ? 'selected' : ''}>Full-time</option>
+          <option value="Part-time" ${isEdit && job.type === 'Part-time' ? 'selected' : ''}>Part-time</option>
+          <option value="Contract" ${isEdit && job.type === 'Contract' ? 'selected' : ''}>Contract</option>
+          <option value="Internship" ${isEdit && job.type === 'Internship' ? 'selected' : ''}>Internship</option>
+        </select>
+      </div>
+      <div>
+        <label for="jobDescription">Job Description</label>
+        <textarea id="jobDescription" rows="5" required>${isEdit ? escapeHtml(job.description) : ''}</textarea>
+      </div>
+      <button type="submit"><i class="fas fa-save"></i> ${isEdit ? 'Update Job' : 'Post Job'}</button>
+      <button type="button" class="secondary" onclick="showHome()"><i class="fas fa-times"></i> Cancel</button>
+    </form>
+  `;
+}
+
+function handleJobPost(e, jobId = null) {
+  e.preventDefault();
+  
+  const isEdit = jobId !== null;
+  
+  const newJob = {
+    id: isEdit ? jobId : Date.now(),
+    title: document.getElementById('jobTitle').value,
+    company: document.getElementById('jobCompany').value,
+    location: document.getElementById('jobLocation').value,
+    salary: document.getElementById('jobSalary').value,
+    type: document.getElementById('jobType').value,
+    description: document.getElementById('jobDescription').value,
+    postedDate: isEdit ? jobs.find(j => j.id === jobId).postedDate : new Date().toISOString().split('T')[0],
+    postedBy: currentUser.id
+  };
+  
+  if (isEdit) {
+    // Update existing job
+    const index = jobs.findIndex(j => j.id === jobId);
+    if (index !== -1) {
+      jobs[index] = newJob;
+    }
+  } else {
+    // Add new job
+    jobs.unshift(newJob);
+  }
+  
+  showHome();
+  
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      title: isEdit ? 'Job Updated!' : 'Job Posted!',
+      text: `Your job listing has been successfully ${isEdit ? 'updated' : 'posted'}.`,
+      icon: 'success'
+    });
+  }
+}
+
+function editJob(jobId) {
+  showPostJobForm(jobId);
+}
+
+function deleteJob(jobId) {
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      title: 'Delete Job?',
+      text: "Are you sure you want to delete this job posting?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        jobs = jobs.filter(j => j.id !== jobId);
+        showHome();
+        Swal.fire(
+          'Deleted!',
+          'Your job posting has been deleted.',
+          'success'
+        );
+      }
+    });
+  } else {
+    if (confirm('Are you sure you want to delete this job posting?')) {
+      jobs = jobs.filter(j => j.id !== jobId);
+      showHome();
+      alert('Job posting deleted successfully!');
+    }
+  }
+}
+
+function checkAuthBeforeResume() {
+  if (!currentUser) {
+    showSimpleMessage("Login Required", "You need to login to create a resume.");
+    showLoginForm();
+    return;
+  }
+  
+  if (currentUser.type !== 'jobseeker') {
+    showSimpleMessage("Access Denied", "Only job seekers can create resumes.");
+    return;
+  }
+  
+  showResumeForm();
+}
+
+function showResumeForm() {
+  content.innerHTML = `
+    <h2>Create/Update Your Resume</h2>
+    <form id="resumeForm" onsubmit="handleResumeSave(event)">
+      <div>
+        <label for="resumeFullName">Full Name</label>
+        <input type="text" id="resumeFullName" required>
+      </div>
+      <div>
+        <label for="resumeEmail">Email</label>
+        <input type="email" id="resumeEmail" required>
+      </div>
+      <div>
+        <label for="resumePhone">Phone</label>
+        <input type="tel" id="resumePhone" required>
+      </div>
+      <div>
+        <label for="resumeEducation">Education</label>
+        <textarea id="resumeEducation" rows="3" required></textarea>
+      </div>
+      <div>
+        <label for="resumeExperience">Work Experience</label>
+        <textarea id="resumeExperience" rows="5" required></textarea>
+      </div>
+      <div>
+        <label for="resumeSkills">Skills</label>
+        <textarea id="resumeSkills" rows="3" required></textarea>
+      </div>
+      <button type="submit"><i class="fas fa-save"></i> Save Resume</button>
+      <button type="button" class="secondary" onclick="showHome()"><i class="fas fa-times"></i> Cancel</button>
+    </form>
+  `;
+  
+  // Load existing resume if available
+  const userResume = resumes.find(r => r.userId === currentUser.id);
+  if (userResume) {
+    document.getElementById('resumeFullName').value = userResume.fullName || '';
+    document.getElementById('resumeEmail').value = userResume.email || '';
+    document.getElementById('resumePhone').value = userResume.phone || '';
+    document.getElementById('resumeEducation').value = userResume.education || '';
+    document.getElementById('resumeExperience').value = userResume.experience || '';
+    document.getElementById('resumeSkills').value = userResume.skills || '';
+  }
+}
+
+function handleResumeSave(e) {
+  e.preventDefault();
+  
+  const resume = {
+    userId: currentUser.id,
+    fullName: document.getElementById('resumeFullName').value,
+    email: document.getElementById('resumeEmail').value,
+    phone: document.getElementById('resumePhone').value,
+    education: document.getElementById('resumeEducation').value,
+    experience: document.getElementById('resumeExperience').value,
+    skills: document.getElementById('resumeSkills').value,
+    updatedAt: new Date().toISOString()
+  };
+  
+  // Remove old resume if exists
+  resumes = resumes.filter(r => r.userId !== currentUser.id);
+  resumes.push(resume);
+  
+  showHome();
+  
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      title: 'Resume Saved!',
+      text: 'Your resume has been successfully saved.',
+      icon: 'success'
+    });
+  }
+}
+
+function checkAuthBeforeApplications() {
+  if (!currentUser) {
+    showSimpleMessage("Login Required", "You need to login to view your applications.");
+    showLoginForm();
+    return;
+  }
+  
+  if (currentUser.type !== 'jobseeker') {
+    showSimpleMessage("Access Denied", "Only job seekers can view applications.");
+    return;
+  }
+  
+  showUserApplications();
+}
+
+function showUserApplications() {
+  const userApplications = applications.filter(app => app.userId === currentUser.id);
+  
+  let html = `<h2>Your Job Applications</h2>`;
+  
+  if (userApplications.length === 0) {
+    html += `<p>You haven't applied to any jobs yet.</p>`;
+  } else {
+    html += `<div class="application-list">`;
+    
+    userApplications.forEach(app => {
+      const job = jobs.find(j => j.id === app.jobId);
+      if (!job) return;
+      
+      html += `
+        <div class="application">
+          <h3>${escapeHtml(job.title)} at ${escapeHtml(job.company)}</h3>
+          <p>Applied on: ${escapeHtml(app.appliedDate)}</p>
+          <div class="status ${escapeHtml(app.status)}">Status: ${escapeHtml(app.status)}</div>
+          ${app.notes ? `<p>Notes: ${escapeHtml(app.notes)}</p>` : ''}
+        </div>
+      `;
+    });
+    
+    html += `</div>`;
+  }
+  
+  content.innerHTML = html;
+}
+
+function checkAuthBeforeManageJobs() {
+  if (!currentUser) {
+    showSimpleMessage("Login Required", "You need to login to manage jobs.");
+    showLoginForm();
+    return;
+  }
+  
+  if (currentUser.type !== 'employer') {
+    showSimpleMessage("Access Denied", "Only employers can manage jobs.");
+    return;
+  }
+  
+  showEmployerJobs();
+}
+
+function showEmployerJobs() {
+  const employerJobs = jobs.filter(job => job.postedBy === currentUser.id);
+  
+  let html = `<h2>Your Job Postings</h2>`;
+  
+  if (employerJobs.length === 0) {
+    html += `<p>You haven't posted any jobs yet.</p>`;
+  } else {
+    html += `<div class="job-list">`;
+    
+    employerJobs.forEach(job => {
+      const jobApplications = applications.filter(app => app.jobId === job.id);
+      
+      html += `
+        <div class="job">
+          <h3>${escapeHtml(job.title)}</h3>
+          <p><strong>${escapeHtml(job.company)}</strong> - ${escapeHtml(job.location)}</p>
+          <div class="job-meta">
+            <span><i class="fas fa-money-bill-wave"></i> ${escapeHtml(job.salary)}</span>
+            <span><i class="fas fa-clock"></i> ${escapeHtml(job.type)}</span>
+            <span><i class="fas fa-calendar-alt"></i> Posted: ${escapeHtml(job.postedDate)}</span>
+            <span><i class="fas fa-users"></i> Applications: ${jobApplications.length}</span>
+          </div>
+          <p>${escapeHtml(job.description)}</p>
+          <div class="job-actions">
+            <button onclick="viewJobApplications(${job.id})">
+              <i class="fas fa-eye"></i> View Applications (${jobApplications.length})
+            </button>
+            <button class="secondary" onclick="editJob(${job.id})">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="danger" onclick="deleteJob(${job.id})">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+        </div>
+      `;
+    });
+    
+    html += `</div>`;
+  }
+  
+  html += `
+    <div style="margin-top: 30px; text-align: center;">
+      <button onclick="checkAuthBeforePosting()">
+        <i class="fas fa-plus-circle"></i> Post New Job
+      </button>
+    </div>
+  `;
+  
+  content.innerHTML = html;
+}
+
+function viewJobApplications(jobId) {
+  const job = jobs.find(j => j.id === jobId);
+  const jobApplications = applications.filter(app => app.jobId === jobId);
+  
+  let html = `
+    <h2>Applications for ${escapeHtml(job.title)}</h2>
+    <button onclick="showEmployerJobs()" style="margin-bottom: 20px;">
+      <i class="fas fa-arrow-left"></i> Back to Jobs
+    </button>
+  `;
+  
+  if (jobApplications.length === 0) {
+    html += `<p>No applications for this job yet.</p>`;
+  } else {
+    html += `<div class="application-list">`;
+    
+    jobApplications.forEach(app => {
+      const applicant = users.find(u => u.id === app.userId);
+      const resume = resumes.find(r => r.userId === app.userId);
+      
+      html += `
+        <div class="application">
+          <h3>${escapeHtml(applicant.username)}</h3>
+          <p>Applied on: ${escapeHtml(app.appliedDate)}</p>
+          <div class="status ${escapeHtml(app.status)}">Status: ${escapeHtml(app.status)}</div>
+          
+          ${resume ? `
+            <div style="margin-top: 15px;">
+              <h4>Resume Details:</h4>
+              <p><strong>Name:</strong> ${escapeHtml(resume.fullName)}</p>
+              <p><strong>Email:</strong> ${escapeHtml(resume.email)}</p>
+              <p><strong>Phone:</strong> ${escapeHtml(resume.phone)}</p>
+              
+              <button onclick="viewResumeDetails(${app.userId})" style="margin-top: 10px;">
+                <i class="fas fa-file-alt"></i> View Full Resume
+              </button>
+            </div>
+          ` : '<p>No resume available for this applicant.</p>'}
+          
+          <div class="job-actions" style="margin-top: 15px;">
+            <button onclick="updateApplicationStatus(${app.id}, 'accepted')" class="secondary">
+              <i class="fas fa-check"></i> Accept
+            </button>
+            <button onclick="updateApplicationStatus(${app.id}, 'declined')" class="danger">
+              <i class="fas fa-times"></i> Decline
+            </button>
+          </div>
+        </div>
+      `;
+    });
+    
+    html += `</div>`;
+  }
+  
+  content.innerHTML = html;
+}
+
+function viewResumeDetails(userId) {
+  const resume = resumes.find(r => r.userId === userId);
+  const user = users.find(u => u.id === userId);
+  
+  if (!resume) {
+    showSimpleMessage("No Resume", "This user hasn't created a resume yet.");
+    return;
+  }
+  
+  let html = `
+    <h2>Resume of ${escapeHtml(user.username)}</h2>
+    <button onclick="history.back()" style="margin-bottom: 20px;">
+      <i class="fas fa-arrow-left"></i> Back
+    </button>
+    
+    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+      <h3>${escapeHtml(resume.fullName)}</h3>
+      <p><i class="fas fa-envelope"></i> ${escapeHtml(resume.email)}</p>
+      <p><i class="fas fa-phone"></i> ${escapeHtml(resume.phone)}</p>
+      
+      <h4 style="margin-top: 20px;"><i class="fas fa-graduation-cap"></i> Education</h4>
+      <p>${escapeHtml(resume.education).replace(/\n/g, '<br>')}</p>
+      
+      <h4 style="margin-top: 20px;"><i class="fas fa-briefcase"></i> Work Experience</h4>
+      <p>${escapeHtml(resume.experience).replace(/\n/g, '<br>')}</p>
+      
+      <h4 style="margin-top: 20px;"><i class="fas fa-tools"></i> Skills</h4>
+      <p>${escapeHtml(resume.skills).replace(/\n/g, '<br>')}</p>
+    </div>
+  `;
+  
+  content.innerHTML = html;
+}
+
+function updateApplicationStatus(applicationId, status) {
+  const index = applications.findIndex(app => app.id === applicationId);
+  
+  if (index !== -1) {
+    applications[index].status = status;
+    
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        title: 'Status Updated!',
+        text: `Application has been ${status}.`,
+        icon: 'success'
+      }).then(() => {
+        history.back();
+      });
+    } else {
+      alert(`Application status updated to ${status}`);
+      history.back();
+    }
+  }
+}
+
+function applyForJob(jobId) {
+  if (!currentUser) {
+    showSimpleMessage("Login Required", "You need to login to apply for jobs.");
+    showLoginForm();
+    return;
+  }
+  
+  if (currentUser.type !== 'jobseeker') {
+    showSimpleMessage("Access Denied", "Only job seekers can apply for jobs.");
+    return;
+  }
+  
+  const job = jobs.find(j => j.id === jobId);
+  if (!job) return;
+  
+  const userResume = resumes.find(r => r.userId === currentUser.id);
+  
+  if (!userResume) {
+    showSimpleMessage("Resume Required", "You need to create a resume before applying.");
+    showResumeForm();
+    return;
+  }
+  
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      title: `Apply for ${job.title}?`,
+      html: `You're about to apply for <strong>${escapeHtml(job.title)}</strong> at <strong>${escapeHtml(job.company)}</strong>.<br><br>
+             Your resume will be submitted for this position.`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, apply now!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        submitApplication(jobId);
+      }
+    });
+  } else {
+    if (confirm(`Apply for ${job.title} at ${job.company}?`)) {
+      submitApplication(jobId);
+    }
+  }
+}
+
+function submitApplication(jobId) {
+  const newApplication = {
+    id: Date.now(),
+    jobId: jobId,
+    userId: currentUser.id,
+    appliedDate: new Date().toISOString().split('T')[0],
+    status: "Pending",
+    notes: ""
+  };
+  
+  applications.push(newApplication);
+  
+  if (typeof Swal !== 'undefined') {
+    Swal.fire({
+      title: 'Application Submitted!',
+      text: 'Your application has been successfully submitted.',
+      icon: 'success'
+    }).then(() => {
+      showUserApplications();
+    });
+  } else {
+    alert('Application submitted successfully!');
+    showUserApplications();
+  }
+}
+
+function exportApplications() {
+  if (!currentUser) {
+    showSimpleMessage("Login Required", "You need to login to export applications.");
+    showLoginForm();
+    return;
+  }
+  
+  let csvContent = "data:text/csv;charset=utf-8,";
+  
+  if (currentUser.type === 'jobseeker') {
+    const userApplications = applications.filter(app => app.userId === currentUser.id);
+    
+    if (userApplications.length === 0) {
+      showSimpleMessage("No Applications", "You don't have any applications to export.");
+      return;
+    }
+    
+    csvContent += "Job Title,Company,Applied Date,Status\n";
+    
+    userApplications.forEach(app => {
+      const job = jobs.find(j => j.id === app.jobId);
+      if (job) {
+        csvContent += `${escapeCsv(job.title)},${escapeCsv(job.company)},${escapeCsv(app.appliedDate)},${escapeCsv(app.status)}\n`;
+      }
+    });
+  } else if (currentUser.type === 'employer') {
+    const employerJobs = jobs.filter(job => job.postedBy === currentUser.id);
+    
+    if (employerJobs.length === 0) {
+      showSimpleMessage("No Jobs", "You don't have any jobs to export.");
+      return;
+    }
+    
+    csvContent += "Job Title,Company,Location,Applications\n";
+    
+    employerJobs.forEach(job => {
+      const jobApplications = applications.filter(app => app.jobId === job.id);
+      csvContent += `${escapeCsv(job.title)},${escapeCsv(job.company)},${escapeCsv(job.location)},${jobApplications.length}\n`;
+    });
+  }
+  
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", currentUser.type === 'jobseeker' ? "my_job_applications.csv" : "my_job_postings.csv");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Helper functions for security and compatibility
+function escapeHtml(unsafe) {
+  if (!unsafe) return '';
+  return unsafe.toString()
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function escapeCsv(unsafe) {
+  if (!unsafe) return '';
+  return `"${unsafe.toString().replace(/"/g, '""')}"`;
+}
+
+// Initial page load
+showHome();
+</script>
+
+</body>
+</html>
